@@ -11,14 +11,14 @@
 
     body {
       margin: 0; padding: 0;
-      height: 100vh; width: 100vw;
+      min-height: 100vh; width: 100vw;
       display: flex; flex-direction: row;
       align-items: center; justify-content: center;
       font-family: 'Kanit', sans-serif;
       text-align: center;
       color: #5c4b37;
       position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
       /* พื้นหลังรูปภาพวิวไทยตามต้นแบบ */
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
@@ -27,13 +27,13 @@
 
     .main-content {
       flex: 1;
-      height: 100vh;
+      width: 100%;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 5px;
-      overflow: hidden;
+      padding: 10px;
     }
 
     .container {
@@ -42,16 +42,18 @@
       -webkit-backdrop-filter: blur(10px);
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.5);
-      padding: 5px 15px;
+      padding: 15px;
       box-shadow: 0 15px 35px rgba(0,0,0,0.1);
       max-width: 800px;
       width: 95%;
-      height: 98vh;
+      min-height: 90vh;
+      max-height: 98vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       margin: auto;
-      gap: 2px;
+      gap: 5px;
+      overflow-y: auto;
     }
 
     .sidebar {
@@ -62,7 +64,7 @@
       -webkit-backdrop-filter: blur(10px);
       border-left: 1px solid rgba(255, 255, 255, 0.5);
       padding: 10px;
-      margin-right: 10px;
+      margin: 10px;
       border-radius: 20px;
       display: flex;
       flex-direction: column;
@@ -397,20 +399,22 @@
     .btn-sgroup { color: #b08d57; border-color: #b08d57; }
     .btn-sgroup:hover { background: #b08d57; color: #fff; }
 
-    @media (max-width: 900px) {
-      h1 { font-size: 32px; }
-      #branch { font-size: 40px; }
-      #winner { font-size: 54px; }
-      #jackpotBtn { font-size: 22px; padding: 15px 35px; }
-      input[type="text"] { width: 100%; max-width: 300px; }
+    @media (max-width: 1100px) {
+      body { flex-direction: column; overflow-y: auto; height: auto; }
+      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 1px solid rgba(255,255,255,0.5); }
+      .container { height: auto; min-height: 90vh; margin: 10px auto; padding: 20px 15px; }
+      .main-content { height: auto; }
     }
 
     @media (max-width: 600px) {
-      .container { padding: 20px; }
-      h1 { font-size: 28px; }
-      #branch { font-size: 32px; }
-      #winner { font-size: 38px; }
-      button { font-size: 16px; padding: 10px 18px; }
+      .container { padding: 15px 10px; width: 98%; }
+      h1 { font-size: 16px; }
+      #winner { font-size: 28px; }
+      .branch-logo-strip img { height: 20px; }
+      .upload-row { flex-direction: column; gap: 5px; }
+      input[type="text"] { width: 100%; }
+      .btn-action { width: 100%; padding: 10px; }
+      .branch-btn { padding: 6px 12px; font-size: 12px; }
     }
   </style>
 </head>
