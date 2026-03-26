@@ -10,88 +10,82 @@
     * { box-sizing: border-box; }
 
     body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: row; /* เปลี่ยนเป็นแนวนอนเพื่อรองรับ Sidebar */
-      align-items: center;
-      justify-content: center;
+      margin: 0; padding: 0;
+      height: 100vh; width: 100vw;
+      display: flex; flex-direction: row;
+      align-items: center; justify-content: center;
       font-family: 'Kanit', sans-serif;
       text-align: center;
-      /* ธีม S HOTEL: Beige & Gold */
-      background: #f2ede4;
-      color: #b08d57;
-      transition: all 0.5s ease;
+      color: #5c4b37;
       position: relative;
-      overflow-x: hidden;
+      overflow: hidden;
+      /* พื้นหลังรูปภาพวิวไทยตามต้นแบบ */
+      background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+      background-size: cover;
+      background-position: center;
     }
 
     .main-content {
       flex: 1;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      z-index: 1;
+      padding: 5px;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 5px 15px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      max-width: 800px;
+      width: 95%;
+      height: 98vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: auto;
+      gap: 2px;
     }
 
     .sidebar {
-      width: 300px;
-      height: 90vh;
-      background: rgba(255, 255, 255, 0.9);
+      width: 260px;
+      height: 96vh;
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(10px);
-      border-left: 2px solid #b08d57;
-      padding: 20px;
-      margin-right: 20px;
+      -webkit-backdrop-filter: blur(10px);
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 10px;
+      margin-right: 10px;
       border-radius: 20px;
       display: flex;
       flex-direction: column;
-      z-index: 2;
-      box-shadow: -5px 0 20px rgba(0,0,0,0.05);
+      box-shadow: -5px 0 15px rgba(0,0,0,0.05);
     }
 
-    .sidebar h2 {
-      color: #b08d57;
-      font-size: 24px;
-      margin-top: 0;
-      border-bottom: 2px solid #b08d57;
-      padding-bottom: 10px;
-    }
-
+    .sidebar h2 { font-size: 16px; margin: 0 0 10px; border-bottom: 2px solid #b08d57; padding-bottom: 5px; color: #b08d57; display: flex; align-items: center; justify-content: center; gap: 5px; }
     #winnerList {
       flex: 1;
       overflow-y: auto;
       text-align: left;
-      margin-top: 10px;
     }
 
     .winner-item {
       background: #fff;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 10px;
-      border-left: 4px solid #b08d57;
-      animation: slideIn 0.3s ease-out;
+      padding: 8px; margin-bottom: 8px;
+      border-radius: 10px; border-left: 4px solid #b08d57;
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
-    .winner-item.jackpot {
-      border-left-color: #8c6d41;
-      background: #fdfaf5;
-    }
-
-    .winner-item .w-name {
-      font-weight: bold;
-      font-size: 18px;
-      color: #5c4b37;
-    }
-
-    .winner-item .w-info {
-      font-size: 14px;
-      color: #b08d57;
-    }
+    .winner-item.jackpot { border-left-color: #8c6d41; background: #fdfaf5; }
+    .winner-item .w-name { font-size: 14px; font-weight: 700; color: #5c4b37; }
+    .winner-item .w-info { font-size: 11px; color: #b08d57; }
 
     @keyframes slideIn {
       from { transform: translateX(50px); opacity: 0; }
@@ -137,17 +131,20 @@
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(15px);
-      border-radius: 24px;
-      border: 2px solid #b08d57; /* สีทอง/บรอนซ์ */
-      padding: 30px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
-      max-width: 950px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 10px 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      max-width: 800px;
       width: 95%;
-      position: relative;
-      z-index: 1;
-      margin: 20px auto;
+      height: 96vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin: auto;
     }
 
     #winner.spinning {
@@ -169,33 +166,33 @@
 
     .top-panel {
       width: 100%;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
     .main-logo {
-      width: 150px;
-      margin-bottom: 10px;
+      width: 100px;
+      margin-bottom: 2px;
       filter: drop-shadow(0 2px 5px rgba(176, 141, 87, 0.2));
     }
 
     .branch-logo-strip {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       flex-wrap: wrap;
       background: rgba(255, 255, 255, 0.5);
-      padding: 10px 20px;
+      padding: 5px 15px;
       border-radius: 40px;
       border: 1px solid rgba(176, 141, 87, 0.2);
     }
 
     .branch-logo-strip img {
-      height: 35px;
+      height: 25px;
       width: auto;
       object-fit: contain;
       filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));
@@ -207,31 +204,31 @@
     }
 
     h1 {
-      margin: 0 0 20px;
-      font-size: 42px;
+      margin: 2px 0 5px;
+      font-size: 18px;
       font-weight: 700;
       color: #b08d57;
       text-shadow: none;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
     }
 
     .upload-row {
       display: flex;
-      gap: 15px;
+      gap: 10px;
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
     }
 
     input[type="text"] {
       background: #fff;
       border: 1px solid #d4c8b8;
       color: #5c4b37;
-      padding: 12px 20px;
-      border-radius: 12px;
-      width: 350px;
-      font-size: 18px;
+      padding: 5px 12px;
+      border-radius: 10px;
+      width: 220px;
+      font-size: 13px;
       font-family: 'Kanit', sans-serif;
     }
 
@@ -240,10 +237,10 @@
     }
 
     button {
-      padding: 12px 25px;
+      padding: 8px 20px;
       border-radius: 15px;
       font-weight: 700;
-      font-size: 18px;
+      font-size: 14px;
       cursor: pointer;
       border: none;
       transition: all 0.3s;
@@ -251,10 +248,10 @@
     }
 
     .btn-action {
-      padding: 10px 25px;
-      border-radius: 15px; /* ปรับให้โค้งมนตามรูป */
+      padding: 8px 20px;
+      border-radius: 12px;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 14px;
       color: #fff;
       display: inline-flex;
       align-items: center;
@@ -292,41 +289,41 @@
     }
 
     #status {
-      font-size: 20px;
+      font-size: 12px;
       color: #a09080;
-      margin-top: 10px;
+      margin-top: 5px;
       font-weight: 300;
     }
 
     #branch {
-      font-size: 52px;
+      font-size: 20px;
       color: #8c6d41;
-      margin-top: 25px;
-      min-height: 65px;
+      margin-top: 5px;
+      min-height: 25px;
       font-weight: 700;
     }
 
     #winner {
-      font-size: 72px;
-      margin: 10px 0 30px;
-      min-height: 90px;
+      font-size: 36px;
+      margin: 2px 0 10px;
+      min-height: 45px;
       color: #5c4b37;
       font-weight: 700;
     }
 
     .button-row {
-      margin-bottom: 30px;
+      margin-bottom: 10px;
     }
 
     #jackpotBtn {
       background: #b08d57;
       color: #fff;
-      font-size: 28px;
-      padding: 18px 50px;
+      font-size: 16px;
+      padding: 8px 30px;
       border: 2px solid #fff;
-      border-radius: 20px;
+      border-radius: 12px;
       animation: pulse 2s infinite;
-      box-shadow: 0 10px 30px rgba(176, 141, 87, 0.3);
+      box-shadow: 0 4px 10px rgba(176, 141, 87, 0.3);
     }
 
     @keyframes pulse {
@@ -337,38 +334,40 @@
 
     .branch-section {
       border-top: 1px solid #d4c8b8;
-      padding-top: 20px;
+      padding-top: 5px;
+      margin-top: 2px;
+      width: 100%;
     }
 
     .label {
       color: #a09080;
-      font-size: 22px;
+      font-size: 13px;
       font-weight: 700;
-      margin-bottom: 15px;
-      display: inline-block;
+      margin-bottom: 5px;
+      display: block;
       text-transform: uppercase;
     }
 
     #branchButtons {
       display: flex;
-      justify-content: center;
-      gap: 12px;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
     }
 
     .branch-btn {
       background: #fff;
       color: #b08d57;
-      border: 2px solid #b08d57;
-      font-size: 18px;
-      padding: 12px 24px;
-      border-radius: 50px; /* ปรับเป็นทรงมนยาวตามรูป */
+      border: 1.5px solid #b08d57;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 50px;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-weight: 700;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      margin: 5px;
-      min-width: 220px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .branch-btn:hover {
