@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ระบบจับรางวัล 4 ภาค</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0; padding: 0;
+      height: 100vh; width: 100vw;
+      display: flex; flex-direction: row;
+      align-items: center; justify-content: center;
+      font-family: 'Kanit', sans-serif;
+      text-align: center;
+      background: #f2ede4;
+      color: #b08d57;
+      position: relative;
+    }
+
+    .main-content {
+      flex: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 2px solid #b08d57;
+      padding: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      max-width: 800px;
+      width: 98%;
+      height: 98vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin: auto;
+    }
+
+    .sidebar {
+      width: 200px;
+      height: 98vh;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-left: 2px solid #b08d57;
+      padding: 5px;
+      margin-right: 5px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.05);
+    }
+
+    h1 { margin: 0; font-size: 18px; font-weight: 700; }
+    .main-logo { width: 60px; margin: 0 auto; }
+    
+    .branch-logo-strip {
+      margin: 2px auto; padding: 2px 8px; gap: 5px;
+      display: flex; justify-content: center; align-items: center;
+      background: rgba(255, 255, 255, 0.5); border-radius: 20px;
+      border: 1px solid rgba(176, 141, 87, 0.2);
+    }
+    .branch-logo-strip img { height: 16px; width: auto; }
+
+    .upload-row { margin: 2px 0; gap: 4px; display: flex; justify-content: center; }
+    .upload-row input { padding: 4px 8px; font-size: 11px; width: 180px; border-radius: 5px; border: 1px solid #d4c8b8; }
+    .btn-action { padding: 4px 10px; font-size: 11px; border-radius: 5px; font-weight: 700; cursor: pointer; border: none; }
+    
+    #branch { font-size: 20px; margin: 2px 0; min-height: 25px; color: #8c6d41; font-weight: 700; }
+    #winner { font-size: 32px; margin: 2px 0; min-height: 40px; color: #5c4b37; font-weight: 700; }
+    
+    #jackpotBtn {
+      font-size: 14px; padding: 6px 20px;
+      background: #b08d57; color: #fff; border-radius: 10px;
+      border: 1px solid #fff; cursor: pointer;
+    }
+
+    .branch-section { margin-top: 2px; padding-top: 2px; border-top: 1px solid #eee; }
+    .label { font-size: 12px; margin-bottom: 2px; font-weight: 700; color: #a09080; }
+    
+    #branchButtons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .branch-btn { font-size: 10px; padding: 4px; border-radius: 15px; border: 1px solid #b08d57; font-weight: 700; }
+
+    .sidebar h2 { font-size: 14px; margin: 0 0 5px; border-bottom: 1px solid #b08d57; }
+    .winner-item { padding: 4px; margin-bottom: 4px; border-radius: 5px; border-left: 3px solid #b08d57; text-align: left; }
+    .winner-item .w-name { font-size: 12px; font-weight: 700; }
+    .winner-item .w-info { font-size: 9px; }
+  </style>
+</head>
+<body>
+  <!-- Your HTML content here -->
+</body>
+</html>
+  }
+
+  /* Main Content Styles */
+  .main-content {
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    border: 2px solid #b08d57;
+    padding: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    max-width: 850px;
+    width: 98%;
+    height: 96vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+  }
+
+  /* Sidebar Styles */
+  .sidebar {
+    width: 240px;
+    height: 96vh;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-left: 2px solid #b08d57;
+    padding: 10px;
+    margin-right: 5px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Header Styles */
+  h1 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #b08d57;
+  }
+
+  /* Logo Styles */
+  .main-logo {
+    width: 60px;
+    margin-bottom: 5px;
+  }
+
+  /* Branch Logo Strip Styles */
+  .branch-logo-strip {
+    margin-bottom: 5px;
+    padding: 3px 10px;
+    gap: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 30px;
+    border: 1px solid rgba(176, 141, 87, 0.2);
+  }
+
+  .branch-logo-strip img {
+    height: 18px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Upload Row Styles */
+  .upload-row {
+    margin-bottom: 5px;
+    gap: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .upload-row input[type="text"] {
+    padding: 5px 10px;
+    font-size: 13px;
+    width: 180px;
+    border-radius: 8px;
+    border: 1px solid #d4c8b8;
+  }
+
+  /* Button Styles */
+  .btn-action {
+    padding: 5px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+  }
+
+  /* Status Styles */
+  #status, .counter-info, .config-row {
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+
+  /* Branch Styles */
+  #branch {
+    font-size: 24px;
+    margin-top: 5px;
+    min-height: 30px;
+    color: #8c6d41;
+    font-weight: 700;
+  }
+
+  /* Winner Styles */
+  #winner {
+    font-size: 36px;
+    margin: 2px 0 5px;
+    min-height: 40px;
+    color: #5c4b37;
+    font-weight: 700;
+  }
+
+  /* Jackpot Button Styles */
+  #jackpotBtn {
+    font-size: 16px;
+    padding: 8px 25px;
+    margin: 2px 0;
+    background: #b08d57;
+    color: #fff;
+    border-radius: 15px;
+    border: 2px solid #fff;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+  }
+
+  /* Branch Section Styles */
+  .branch-section {
+    margin-top: 2px;
+    padding-top: 5px;
+    border-top: 1px solid #d4c8b8;
+  }
+
+  /* Label Styles */
+  .label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: #a09080;
+  }
+
+  /* Branch Buttons Styles */
+  #branchButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    margin-top: 2px;
+  }
+
+  .branch-btn {
+    font-size: 11px;
+    padding: 5px 8px;
+    min-width: 0;
+    border-radius: 20px;
+    background: #fff;
+    border: 1.5px solid #b08d57;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+      if (spinning) return;
+      const url = sheetUrlInput.value.trim();
+      if (!url) {
+        alert("กรุณาใส่ Google Sheets URL ก่อน");
+        return;
+      }
+      
+      syncBtn.disabled = true;
+      syncStatus.style.display = "inline-block";
+      syncStatus.classList.add('syncing');
+      
+      try {
+        await silentLoadData();
+        setStatus(`อัปเดตข้อมูลล่าสุดแล้ว (${participants.length} คน)`);
+      } catch (e) {
+        alert("การ Sync ข้อมูลขัดข้อง: " + e.message);
+      } finally {
+        syncStatus.style.display = "none";
+        syncStatus.classList.remove('syncing');
+        syncBtn.disabled = false;
+      }
+    }
+
+    async function silentLoadData() {
+      const url = sheetUrlInput.value.trim();
+      const sheetId = extractSheetId(url);
+      if (!sheetId) return;
+
+      const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+      const response = await fetch(csvUrl);
+      if (!response.ok) throw new Error("Network response was not ok");
+
+      const csvText = await response.text();
+      const lines = csvText.split('\n').filter(line => line.trim());
+      if (lines.length < 2) return;
+
+      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+      let nameIndex = -1;
+      let branchIndex = -1;
+      let idIndex = -1;
+
+      headers.forEach((header, index) => {
+        const h = header.toLowerCase().trim();
+        const isTimestamp = h === 'ประทับเวลา' || h === 'timestamp' || h.includes('เวลา');
+
+        if ((h.includes('รหัส') || h.includes('employee id')) && !isTimestamp) idIndex = index;
+        if ((h.includes('ชื่อ') || h.includes('นามสกุล') || h.includes('name')) && !isTimestamp && !h.includes('สาขา')) nameIndex = index;
+        if (h.includes('สาขา') || h.includes('branch')) branchIndex = index;
+      });
+
+      if (nameIndex === -1 || branchIndex === -1) return;
+
+      const rawParticipants = lines.slice(1)
+        .map((line, rowIndex) => {
+          // ใช้การแยกข้อมูลแบบเดียวกับที่ใช้ใน loadFromGoogleSheet เพื่อความเสถียร
+          const values = [];
+          let current = '';
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') inQuotes = !inQuotes;
+            else if (char === ',' && !inQuotes) {
+              values.push(current.trim().replace(/^"|"$/g, ''));
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          values.push(current.trim().replace(/^"|"$/g, ''));
+
+          return {
+            id: rowIndex + 1,
+            name: nameIndex !== -1 ? values[nameIndex] || '' : '',
+            branch: branchIndex !== -1 ? values[branchIndex] || '' : '',
+            employeeID: idIndex !== -1 ? values[idIndex] || '' : ''
+          };
+        })
+        .filter(p => p.name && p.branch);
+
+      const processed = processParticipants(rawParticipants);
+      participants = processed.list;
+      createBranchButtons();
+      
+      // อัปเดต Pool โดยกรองเอาเฉพาะคนที่ยังไม่ได้รางวัลออก
+      const winnerNames = Array.from(winnerListEl.querySelectorAll('.w-name')).map(el => el.textContent.trim());
+      
+      jackpotPool = participants.filter(p => !winnerNames.includes(p.name));
+      bigPool = participants.filter(p => !winnerNames.includes(p.name));
+      
+      let statusMsg = `Sync สำเร็จ (${participants.length} คน)`;
+      if (processed.dupByName > 0 || processed.dupByID > 0) {
+        statusMsg += ` (ตัดชื่อซ้ำ: ${processed.dupByName}, รหัสซ้ำ: ${processed.dupByID})`;
+      }
+      setStatus(statusMsg);
+    }
+
+    function updateJackpotCounter() {
+      jackpotCounterEl.textContent = `สุ่ม Jackpot ไปแล้ว: ${jackpotDrawnCount} รางวัล`;
+    }
+
+    const stageColors = [
+      "red",
+      "green",
+      "purple",
+      "deepskyblue",
+      "yellow",
+      "white",
+      "blue",
+      "orange"
+    ];
+
+    const sheetUrlInput = document.getElementById("sheetUrl");
+    const loadBtn = document.getElementById("loadBtn");
+    const statusEl = document.getElementById("status");
+    const branchEl = document.getElementById("branch");
+    const winnerEl = document.getElementById("winner");
+    const branchButtonsEl = document.getElementById("branchButtons");
+    const drumSound = document.getElementById("drumSound");
+    const winSound = document.getElementById("winSound");
+
+    function setReadableTextColor(bgColor) {
+      if (bgColor === "yellow" || bgColor === "white") {
+        document.body.style.color = "black";
+      } else {
+        document.body.style.color = "white";
+      }
+    }
+
+    function startColorFlash(speed) {
+      // ยกเลิกเอฟเฟกต์กระพริบ
+    }
+
+    function stopColorFlash() {
+      if (colorInterval) {
+        clearInterval(colorInterval);
+        colorInterval = null;
+      }
+    }
+
+    function randomFrom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function normalizeKey(key) {
+      return String(key || "").trim().replace(/\s+/g, "");
+    }
+
+    function buildPools() {
+      jackpotPool = [...participants];
+      bigPool = [...participants];
+    }
+
+    function createBranchButtons() {
+      branchButtonsEl.innerHTML = "";
+      const uniqueBranches = [...new Set(participants.map(p => p.branch))];
+
+      uniqueBranches.forEach(branch => {
+        const btn = document.createElement("button");
+        btn.className = "branch-btn";
+        
+        // กำหนดสีตามชื่อสาขา
+        const name = branch.toUpperCase();
+        if (name.includes("BOX") || name.includes("บ็อกซ์")) btn.classList.add("btn-sbox");
+        else if (name.includes("S15")) btn.classList.add("btn-s15");
+        else if (name.includes("S31")) btn.classList.add("btn-s31");
+        else if (name.includes("S33")) btn.classList.add("btn-s33");
+        else if (name.includes("RATCHADA") || name.includes("รัชดา")) btn.classList.add("btn-sratchada");
+        else if (name.includes("RAM") || name.includes("ราม")) btn.classList.add("btn-sram");
+        else if (name.includes("GROUP") || name.includes("โรงแรม")) btn.classList.add("btn-sgroup");
+        else btn.classList.add("btn-sgroup");
+
+        btn.textContent = branch;
+        btn.onclick = () => drawBigPrize(branch);
+        branchButtonsEl.appendChild(btn);
+      });
+    }
+
+    function setStatus(msg) {
+      statusEl.textContent = msg;
+    }
+
+    function resetDisplay() {
+      branchEl.textContent = "";
+      winnerEl.textContent = "รีเซ็ตแล้ว";
+    }
+
+    function resetAll() {
+      buildPools();
+      spinning = false;
+      stopColorFlash();
+      startColorFlash(600);
+      resetDisplay();
+      jackpotDrawnCount = 0;
+      updateJackpotCounter();
+      winnerListEl.innerHTML = "";
+      setStatus(participants.length ? `รีเซ็ตแล้ว พร้อมใช้งาน (${participants.length} คน)` : "กรุณาวางลิงก์ Google Sheets");
+    }
+
+    function extractSheetId(url) {
+      const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+      return match ? match[1] : null;
+    }
+
+    async function loadFromGoogleSheet() {
+      const url = sheetUrlInput.value.trim();
+      console.log("URL ที่รับมา:", url);
+      
+      if (!url) {
+        setStatus("กรุณาใส่ Google Sheets URL");
+        return;
+      }
+
+      const sheetId = extractSheetId(url);
+      console.log("Sheet ID ที่ดึงได้:", sheetId);
+      
+      if (!sheetId) {
+        setStatus("URL ไม่ถูกต้อง");
+        alert("URL ไม่ถูกต้อง ต้องเป็น Google Sheets URL\nตัวอย่าง: https://docs.google.com/spreadsheets/d/xxxxx/edit");
+        return;
+      }
+
+      setStatus("กำลังดึงข้อมูล...");
+      loadBtn.disabled = true;
+
+      try {
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+        console.log('ลอง:', csvUrl);
+        
+        const response = await fetch(csvUrl);
+        
+        if (!response.ok) {
+          throw new Error(`ดึงข้อมูลไม่สำเร็จ: ${response.status}`);
+        }
+
+        const csvText = await response.text();
+        console.log('CSV:', csvText.substring(0, 200));
+
+        const lines = csvText.split('\n').filter(line => line.trim());
+        if (lines.length < 2) {
+          throw new Error('ไม่มีข้อมูล');
+        }
+
+        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+        console.log('Headers:', headers);
+
+        let nameIndex = -1;
+        let branchIndex = -1;
+        let idIndex = -1;
+
+        headers.forEach((header, index) => {
+          const h = header.toLowerCase().trim();
+          
+          // ตรวจสอบคอลัมน์ประทับเวลา
+          const isTimestamp = h === 'ประทับเวลา' || h === 'timestamp' || h.includes('เวลา');
+
+          // ค้นหา 'รหัสพนักงาน' (ต้องมีคำว่า รหัส และไม่ใช่ประทับเวลา)
+          if ((h.includes('รหัส') || h.includes('employee id')) && !isTimestamp) {
+            idIndex = index;
+          }
+          // ค้นหา 'ชื่อ-สกุล' (ต้องมีคำว่า ชื่อ หรือ นามสกุล และไม่ใช่ประทับเวลา และไม่ใช่สาขา)
+          if ((h.includes('ชื่อ') || h.includes('นามสกุล') || h.includes('name')) && !isTimestamp && !h.includes('สาขา')) {
+            nameIndex = index;
+          }
+          // ค้นหา 'สาขา' (ต้องมีคำว่า สาขา)
+          if (h.includes('สาขา') || h.includes('branch')) {
+            branchIndex = index;
+          }
+        });
+
+        // Debugging: แสดง index ที่หาได้ใน console
+        console.log('Detected Indices:', { nameIndex, branchIndex, idIndex, headers });
+
+        if (nameIndex === -1 || branchIndex === -1) {
+          throw new Error(`ไม่พบคอลัมน์ที่ต้องการ. คอลัมน์ที่เจอ: ${headers.join(', ')}`);
+        }
+
+        const rawParticipants = lines.slice(1)
+          .map((line, rowIndex) => {
+            // แยกด้วย comma แต่ต้องระวัง comma ในฟันหนู
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
+              if (char === '"') inQuotes = !inQuotes;
+              else if (char === ',' && !inQuotes) {
+                values.push(current.trim().replace(/^"|"$/g, ''));
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim().replace(/^"|"$/g, ''));
+
+            return {
+              id: rowIndex + 1,
+              name: nameIndex !== -1 ? values[nameIndex] || '' : '',
+              branch: branchIndex !== -1 ? values[branchIndex] || '' : '',
+              employeeID: idIndex !== -1 ? values[idIndex] || '' : ''
+            };
+          })
+          .filter(p => p.name && p.branch);
+
+        const processed = processParticipants(rawParticipants);
+        participants = processed.list;
+
+        console.log('Participants (Unique):', participants);
+
+        if (!participants.length) {
+          throw new Error('ไม่พบข้อมูลที่ใช้ได้');
+        }
+
+        createBranchButtons();
+        buildPools();
+        branchEl.textContent = "";
+        winnerEl.textContent = "รอประกาศรางวัล";
+        startColorFlash(600);
+
+        let successMsg = `โหลดสำเร็จ ${participants.length} คน`;
+        let alertMsg = `โหลดสำเร็จ ${participants.length} คน`;
+        
+        if (processed.dupByName > 0 || processed.dupByID > 0) {
+          const dupInfo = `พบข้อมูลซ้ำที่ถูกตัดออก:\n- ชื่อซ้ำ: ${processed.dupByName} รายการ\n- รหัสซ้ำ: ${processed.dupByID} รายการ`;
+          
+          const dupDetails = processed.duplicates.map(d => `- ${d.name} (${d.branch}) : ${d.reason}`).join('\n');
+          
+          successMsg += ` (พบข้อมูลซ้ำ ${processed.dupByName + processed.dupByID} รายการ)`;
+          alertMsg += `\n\n${dupInfo}\n\nรายชื่อที่ซ้ำ:\n${dupDetails}`;
+        }
+
+        setStatus(successMsg);
+        alert(alertMsg);
+        syncBtn.style.display = "inline-block"; // แสดงปุ่ม Sync หลังจากโหลดครั้งแรก
+
+      } catch (err) {
+        console.error("Full error:", err);
+        setStatus("ดึงข้อมูลไม่สำเร็จ");
+        alert("ดึงข้อมูลไม่สำเร็จ:\n" + err.message + "\n\nแนะนำ:\n1. แชร์ Sheets เป็น 'Anyone with the link can view'\n2. ตรวจสอบคอลัมน์ 'ชื่อ-สกุล' และ 'สาขา'\n3. ลองรีเฟรชหน้าแล้วลองใหม่");
+      } finally {
+        loadBtn.disabled = false;
+      }
+    }
+
+    function drawJackpot() {
+      if (spinning) return;
+
+      if (!jackpotPool.length) {
+        alert("ไม่มีผู้มีสิทธิ์ Jackpot แล้ว");
+        return;
+      }
+
+      spinning = true;
+      winnerEl.classList.remove('winning-moment');
+      winnerEl.textContent = "กำลังสุ่มสาขา...";
+      branchEl.textContent = "???";
+
+      drumSound.currentTime = 0;
+      drumSound.play().catch(() => {});
+
+      // STEP 1: สุ่มสาขา (5 วินาที)
+      const phase1 = setInterval(() => {
+        const currentBranches = [...new Set(jackpotPool.map(p => p.branch))];
+        branchEl.textContent = randomFrom(currentBranches);
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(phase1);
+
+        const availableBranches = [...new Set(jackpotPool.map(p => p.branch))];
+        const selectedBranch = randomFrom(availableBranches);
+        branchEl.textContent = selectedBranch;
+        winnerEl.textContent = "ได้สาขาแล้ว! เตรียมสุ่มชื่อ...";
+
+        // ช่วงพักหายใจ (2 วินาที)
+        setTimeout(() => {
+          winnerEl.textContent = "กำลังสุ่มชื่อ...";
+          // STEP 2: สุ่มชื่อในสาขา (5 วินาที)
+          const phase2 = setInterval(() => {
+            const branchPool = jackpotPool.filter(p => p.branch === selectedBranch);
+            if (!branchPool.length) return;
+            winnerEl.textContent = randomFrom(branchPool).name;
+          }, 100);
+
+          setTimeout(() => {
+            clearInterval(phase2);
+
+            const finalPool = jackpotPool.filter(p => p.branch === selectedBranch);
+            if (!finalPool.length) {
+              drumSound.pause();
+              spinning = false;
+              return;
+            }
+
+            const winner = randomFrom(finalPool);
+
+            // เมื่อได้รางวัล Jackpot ให้เอาชื่อออกจากทั้งสอง Pool เพื่อไม่ให้ได้รางวัลซ้ำอีก
+            jackpotPool = jackpotPool.filter(p => p.id !== winner.id);
+            bigPool = bigPool.filter(p => p.id !== winner.id);
+            
+            jackpotDrawnCount++;
+            updateJackpotCounter();
+            
+            branchEl.textContent = selectedBranch;
+            winnerEl.textContent = `🎉 ${winner.name} 🎉`;
+            
+            addWinnerToList(winner.name, winner.branch, 'jackpot');
+
+            drumSound.pause();
+            drumSound.currentTime = 0;
+            winSound.currentTime = 0;
+            winSound.play().catch(() => {});
+
+            winnerEl.classList.add('winning-moment');
+            setTimeout(() => winnerEl.classList.remove('winning-moment'), 3000);
+
+            spinning = false;
+
+            // รอ 10 วินาทีแล้วรีเซ็ตหน้าจอ
+            setTimeout(() => {
+              if (!spinning) {
+                branchEl.textContent = "";
+                winnerEl.textContent = "รอประกาศรางวัล";
+                winnerEl.classList.remove('winning-moment');
+              }
+            }, 10000);
+          }, 5000); // สเต็ป 2: 5 วินาที
+        }, 2000); // ช่วงพักหายใจ: 2 วินาที
+      }, 5000); // สเต็ป 1: 5 วินาที
+    }
+
+    function drawBigPrize(branch) {
+      if (spinning) return;
+
+      let branchPool = bigPool.filter(p => p.branch === branch);
+      if (!branchPool.length) {
+        alert("สาขานี้ไม่มีสิทธิ์รางวัลใหญ่อีกแล้ว");
+        return;
+      }
+
+      spinning = true;
+      winnerEl.classList.remove('winning-moment');
+      branchEl.textContent = branch;
+      winnerEl.textContent = "กำลังสุ่ม...";
+
+      drumSound.currentTime = 0;
+      drumSound.play().catch(() => {});
+
+      const phase = setInterval(() => {
+        branchPool = bigPool.filter(p => p.branch === branch);
+        if (!branchPool.length) return;
+        winnerEl.textContent = randomFrom(branchPool).name;
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(phase);
+
+        branchPool = bigPool.filter(p => p.branch === branch);
+        if (!branchPool.length) {
+          drumSound.pause();
+          spinning = false;
+          return;
+        }
+
+        const winner = randomFrom(branchPool);
+
+        // เมื่อได้รางวัลภูมิภาค ให้เอาชื่อออกจากแค่ bigPool (รายการภูมิภาค)
+        // เพื่อให้ชื่อเขายังคงอยู่ใน jackpotPool และมีสิทธิ์ลุ้น Jackpot ต่อได้
+        bigPool = bigPool.filter(p => p.id !== winner.id);
+        
+        branchEl.textContent = branch;
+        winnerEl.textContent = `🎉 ${winner.name} 🎉`;
+
+        addWinnerToList(winner.name, winner.branch, 'branch');
+
+        drumSound.pause();
+        drumSound.currentTime = 0;
+        winSound.currentTime = 0;
+        winSound.play().catch(() => {});
+
+        winnerEl.classList.add('winning-moment');
+        setTimeout(() => winnerEl.classList.remove('winning-moment'), 3000);
+
+        spinning = false;
+
+        // รอ 10 วินาทีแล้วรีเซ็ตหน้าจอ
+        setTimeout(() => {
+          if (!spinning) {
+            branchEl.textContent = "";
+            winnerEl.textContent = "รอประกาศรางวัล";
+            winnerEl.classList.remove('winning-moment');
+          }
+        }, 10000);
+      }, 7000); // สุ่มรายชื่อ: 7 วินาที
+    }
+
+    startColorFlash(600);
+  </script>
+</body>
+</html>
