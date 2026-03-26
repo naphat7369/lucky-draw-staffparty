@@ -20,7 +20,7 @@
       position: relative;
       overflow: hidden;
       /* พื้นหลังรูปภาพวิวไทยตามต้นแบบ */
-      background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+      background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
       background-position: center;
     }
@@ -968,9 +968,9 @@
 
             const winner = randomFrom(finalPool);
 
-            // เมื่อได้รางวัล Jackpot ให้เอาชื่อออกจากทั้งสอง Pool เพื่อไม่ให้ได้รางวัลซ้ำอีก
+            // เมื่อได้รางวัล Jackpot ให้เอาชื่อออกจาก Jackpot Pool เท่านั้น (แยก Pool กันอย่างอิสระ)
             jackpotPool = jackpotPool.filter(p => p.id !== winner.id);
-            bigPool = bigPool.filter(p => p.id !== winner.id);
+            // bigPool = bigPool.filter(p => p.id !== winner.id); // คอมเมนต์ออกเพื่อให้ได้รางวัลสาขาต่อได้
             
             jackpotDrawnCount++;
             updateJackpotCounter();
