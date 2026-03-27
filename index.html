@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -6,10 +7,8 @@
   <title>ระบบจับรางวัล 4 ภาค</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    /* ==========================================================================
-       1. GLOBAL STYLES & BACKGROUND (รูปแบบและพื้นหลังทั่วไป)
-       ========================================================================== */
     * { box-sizing: border-box; }
 
     body {
@@ -22,14 +21,12 @@
       color: #5c4b37;
       position: relative;
       overflow-x: hidden;
+      /* พื้นหลังรูปภาพวิวไทยตามต้นแบบ */
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
       background-position: center;
     }
 
-    /* ==========================================================================
-       2. MAIN CONTENT & CONTAINER (ส่วนเนื้อหาหลักและคอนเทนเนอร์)
-       ========================================================================== */
     .main-content {
       flex: 1;
       width: 100%;
@@ -61,9 +58,6 @@
       overflow-y: auto;
     }
 
-    /* ==========================================================================
-       3. SIDEBAR & WINNER LIST (แถบด้านข้างและรายชื่อผู้ชนะ)
-       ========================================================================== */
     .sidebar {
       width: 260px;
       height: 96vh;
@@ -86,17 +80,94 @@
       text-align: left;
     }
 
-    /* ==========================================================================
-       4. ANIMATIONS & EFFECTS (เอฟเฟกต์ต่างๆ)
-       ========================================================================== */
+    .winner-item {
+      background: #fff;
+      padding: 8px; margin-bottom: 8px;
+      border-radius: 10px; border-left: 4px solid #b08d57;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .winner-item.jackpot { border-left-color: #8c6d41; background: #fdfaf5; }
+    .winner-item .w-name { font-size: 14px; font-weight: 700; color: #5c4b37; }
+    .winner-item .w-info { font-size: 11px; color: #b08d57; }
+
     @keyframes slideIn {
       from { transform: translateX(50px); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
     }
 
-    /* ==========================================================================
-       5. TOP PANEL & LOGOS (ส่วนบนและโลโก้)
-       ========================================================================== */
+    @media (max-width: 1100px) {
+      body { flex-direction: column; }
+      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 2px solid #b08d57; }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ลายไทยพื้นหลังจางๆ */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle, transparent 30%, rgba(176, 141, 87, 0.05) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ลายพื้นหลังแบบเรียบหรู */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/white-diamond.pattern');
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 10px 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      max-width: 800px;
+      width: 95%;
+      height: 96vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin: auto;
+    }
+
+    #winner.spinning {
+      font-size: 80px;
+      color: #8c6d41;
+      text-shadow: 0 0 20px rgba(176, 141, 87, 0.2);
+    }
+
+    #winner.winning-moment {
+      animation: winnerReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      color: #5c4b37;
+      text-shadow: 0 0 30px rgba(176, 141, 87, 0.3);
+    }
+
+    @keyframes winnerReveal {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1.2); opacity: 1; }
+    }
+
     .top-panel {
       width: 100%;
       margin-bottom: 5px;
@@ -111,22 +182,69 @@
       filter: drop-shadow(0 2px 5px rgba(176, 141, 87, 0.2));
     }
 
+    .branch-logo-strip {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 5px 15px;
+      border-radius: 40px;
+      border: 1px solid rgba(176, 141, 87, 0.2);
+    }
+
     .branch-logo-strip img {
-      height: 18px;
+      height: 25px;
       width: auto;
       object-fit: contain;
       filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));
       transition: transform 0.3s ease;
     }
 
-    /* ==========================================================================
-       6. BUTTONS & INPUTS (ปุ่มและอินพุต)
-       ========================================================================== */
-    button {
-      padding: 8px 20px;
-      border-radius: 15px;
+    .branch-logo-strip img:hover {
+      transform: scale(1.1);
+    }
+
+    h1 {
+      margin: 2px 0 5px;
+      font-size: 18px;
       font-weight: 700;
-      font-size: 14px;
+      color: #b08d57;
+      text-shadow: none;
+      letter-spacing: 1px;
+    }
+
+    .upload-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      background: #fff;
+      border: 1px solid #d4c8b8;
+      color: #5c4b37;
+      padding: 4px 10px;
+      border-radius: 8px;
+      width: 180px;
+      font-size: 11px;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    input[type="text"]::placeholder {
+      color: #a09080;
+    }
+
+    button {
+      padding: 6px 15px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 12px;
       cursor: pointer;
       border: none;
       transition: all 0.3s;
@@ -134,7 +252,7 @@
     }
 
     .btn-action {
-      padding: 6px 15px;
+      padding: 5px 12px;
       border-radius: 10px;
       font-weight: 700;
       font-size: 12px;
@@ -150,9 +268,30 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    /* ==========================================================================
-       7. LOTTERY DISPLAY (ส่วนแสดงผลชื่อผู้ชนะ/สาขา)
-       ========================================================================== */
+    #loadBtn { 
+      background: #b08d57; /* สีทองบรอนซ์ตามรูป */
+    }
+
+    #syncBtn { 
+      background: #4a90e2; /* สีน้ำเงินตามรูป */
+    }
+
+    #resetBtn { 
+      background: #d4c8b8; /* สีเบจเทาตามรูป */
+      color: #5c4b37;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .btn-action span {
+      font-size: 20px;
+      line-height: 1;
+    }
+
     #status {
       font-size: 12px;
       color: #a09080;
@@ -168,17 +307,22 @@
       font-weight: 700;
     }
 
+    #department {
+      font-size: 24px;
+      color: #b08d57;
+      margin-top: 5px;
+      min-height: 30px;
+      font-weight: 400;
+    }
+
     #winner {
       font-size: 56px;
-      margin: 5px 0 15px;
+      margin: 5px 0 10px;
       min-height: 70px;
       color: #5c4b37;
       font-weight: 700;
     }
 
-    /* ==========================================================================
-       8. MAIN ACTION BUTTONS (ปุ่มสุ่ม Jackpot/ปุ่มรางวัลสาขา)
-       ========================================================================== */
     .button-row {
       margin-bottom: 10px;
     }
@@ -200,23 +344,124 @@
       100% { transform: scale(1); box-shadow: 0 10px 20px rgba(176, 141, 87, 0.2); }
     }
 
-    /* ==========================================================================
-       9. RESPONSIVE DESIGN (การปรับแต่งสำหรับหน้าจอขนาดต่างๆ)
-       ========================================================================== */
+    .branch-section {
+      border-top: 1px solid #d4c8b8;
+      padding-top: 5px;
+      margin-top: 2px;
+      width: 100%;
+    }
+
+    .label {
+      color: #a09080;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      display: block;
+      text-transform: uppercase;
+    }
+
+    #branchButtons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .branch-btn {
+      background: #fff;
+      color: #b08d57;
+      border: 1.5px solid #b08d57;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 50px;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-weight: 700;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .branch-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    /* คลาสสีเฉพาะสำหรับแต่ละโรงแรมตามโลโก้ */
+    .btn-sbox { color: #f39200; border-color: #f39200; }
+    .btn-sbox:hover { background: #f39200; color: #fff; }
+
+    .btn-s15 { color: #8c6d41; border-color: #8c6d41; }
+    .btn-s15:hover { background: #8c6d41; color: #fff; }
+
+    .btn-s31 { color: #5c4b37; border-color: #5c4b37; }
+    .btn-s31:hover { background: #5c4b37; color: #fff; }
+
+    .btn-s33 { color: #444444; border-color: #444444; }
+    .btn-s33:hover { background: #444444; color: #fff; }
+
+    .btn-sratchada { color: #006400; border-color: #006400; }
+    .btn-sratchada:hover { background: #006400; color: #fff; }
+
+    .btn-sram { color: #92c83e; border-color: #92c83e; }
+    .btn-sram:hover { background: #92c83e; color: #fff; }
+
+    .btn-sgroup { color: #b08d57; border-color: #b08d57; }
+    .btn-sgroup:hover { background: #b08d57; color: #fff; }
+
     @media (max-width: 1100px) {
-      body { flex-direction: column; }
-      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 2px solid #b08d57; }
+      body { flex-direction: column; overflow-y: auto; height: auto; }
+      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 1px solid rgba(255,255,255,0.5); }
+      .container { height: auto; min-height: 90vh; margin: 10px auto; padding: 20px 15px; }
+      .main-content { height: auto; }
     }
 
     @media (max-width: 600px) {
       .container { padding: 15px 10px; width: 98%; }
       h1 { font-size: 16px; }
       #winner { font-size: 28px; }
-      .branch-logo-strip img { height: 14px; }
+      .branch-logo-strip img { height: 20px; }
       .upload-row { flex-direction: column; gap: 5px; }
       input[type="text"] { width: 100%; }
       .btn-action { width: 100%; padding: 10px; }
       .branch-btn { padding: 6px 12px; font-size: 12px; }
+    }
+
+    #department.reveal-active {
+      animation: branchPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      text-shadow: 0 0 10px rgba(176, 141, 87, 0.3);
+    }
+
+    #branch.reveal-active {
+      animation: branchPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      text-shadow: 0 0 15px rgba(140, 109, 65, 0.4);
+    }
+
+    #winner.reveal-active {
+      animation: winnerZoom 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      color: #b08d57;
+      text-shadow: 0 0 30px rgba(176, 141, 87, 0.6);
+    }
+
+    @keyframes branchPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes winnerZoom {
+      0% { transform: scale(0.5) translateY(20px); opacity: 0; filter: blur(10px); }
+      50% { transform: scale(1.1); filter: blur(0); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
     }
   </style>
 </head>
@@ -271,6 +516,7 @@
       </style>
 
       <div id="branch"></div>
+      <div id="department"></div>
       <div id="winner">รอประกาศรางวัล</div>
 
       <div class="button-row">
@@ -295,9 +541,6 @@
   <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-firework-explosion-1689.mp3" preload="auto"></audio>
 
   <script>
-    /* ==========================================================================
-       10. JAVASCRIPT LOGIC (ระบบการทำงานทั้งหมด)
-       ========================================================================== */
     let participants = [];
     let jackpotPool = [];
     let bigPool = [];
@@ -361,7 +604,42 @@
 
     const winnerListEl = document.getElementById("winnerList");
 
-    function addWinnerToList(name, branch, type) {
+    function triggerWinEffects() {
+      // เอฟเฟกต์พลุและกระดาษสี
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#b08d57', '#8c6d41', '#d4c8b8']
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#b08d57', '#8c6d41', '#d4c8b8']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+
+      // สุ่มพลุตรงกลาง
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ffd700', '#ffffff', '#b08d57']
+      });
+    }
+
+    function addWinnerToList(name, branch, department, type) {
       const item = document.createElement("div");
       item.className = `winner-item ${type === 'jackpot' ? 'jackpot' : ''}`;
       
@@ -369,13 +647,15 @@
       
       item.innerHTML = `
         <div class="w-name">${name}</div>
-        <div class="w-info">${branch} - ${typeLabel}</div>
+        <div class="w-info">${branch} - ${department}</div>
+        <div class="w-info" style="font-style: italic;">${typeLabel}</div>
       `;
       
       winnerListEl.prepend(item);
       
       // Update display area immediately
       branchEl.textContent = branch;
+      departmentEl.textContent = department;
       winnerEl.textContent = `🎉 ${name} 🎉`;
     }
 
@@ -394,8 +674,17 @@
       syncStatus.classList.add('syncing');
       
       try {
-        await silentLoadData();
-        setStatus(`อัปเดตข้อมูลล่าสุดแล้ว (${participants.length} คน)`);
+        const result = await silentLoadData();
+        let statusMsg = `อัปเดตข้อมูลล่าสุดแล้ว (${participants.length} คน)`;
+        
+        // แจ้งเตือน Alert พร้อมรายละเอียดเมื่อพบข้อมูลซ้ำระหว่าง Sync
+        if (result && (result.dupByName > 0 || result.dupByID > 0)) {
+          const dupInfo = `พบข้อมูลใหม่ที่ซ้ำและถูกตัดออก:\n- ชื่อซ้ำ: ${result.dupByName} รายการ\n- รหัสซ้ำ: ${result.dupByID} รายการ`;
+          const dupDetails = result.duplicates.map(d => `- ${d.name} (${d.branch}) : ${d.reason}`).join('\n');
+          alert(`${dupInfo}\n\nรายชื่อที่ซ้ำ:\n${dupDetails}`);
+        }
+        
+        setStatus(statusMsg);
       } catch (e) {
         alert("การ Sync ข้อมูลขัดข้อง: " + e.message);
       } finally {
@@ -408,7 +697,7 @@
     async function silentLoadData() {
       const url = sheetUrlInput.value.trim();
       const sheetId = extractSheetId(url);
-      if (!sheetId) return;
+      if (!sheetId) return null;
 
       const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
       const response = await fetch(csvUrl);
@@ -416,11 +705,12 @@
 
       const csvText = await response.text();
       const lines = csvText.split('\n').filter(line => line.trim());
-      if (lines.length < 2) return;
+      if (lines.length < 2) return null;
 
       const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
       let nameIndex = -1;
       let branchIndex = -1;
+      let departmentIndex = -1;
       let idIndex = -1;
 
       headers.forEach((header, index) => {
@@ -430,13 +720,13 @@
         if ((h.includes('รหัส') || h.includes('employee id')) && !isTimestamp) idIndex = index;
         if ((h.includes('ชื่อ') || h.includes('นามสกุล') || h.includes('name')) && !isTimestamp && !h.includes('สาขา')) nameIndex = index;
         if (h.includes('สาขา') || h.includes('branch')) branchIndex = index;
+        if (h.includes('แผนก') || h.includes('dept') || h.includes('department')) departmentIndex = index;
       });
 
-      if (nameIndex === -1 || branchIndex === -1) return;
+      if (nameIndex === -1 || branchIndex === -1) return null;
 
       const rawParticipants = lines.slice(1)
         .map((line, rowIndex) => {
-          // ใช้การแยกข้อมูลแบบเดียวกับที่ใช้ใน loadFromGoogleSheet เพื่อความเสถียร
           const values = [];
           let current = '';
           let inQuotes = false;
@@ -456,6 +746,7 @@
             id: rowIndex + 1,
             name: nameIndex !== -1 ? values[nameIndex] || '' : '',
             branch: branchIndex !== -1 ? values[branchIndex] || '' : '',
+            department: departmentIndex !== -1 ? values[departmentIndex] || '' : '-',
             employeeID: idIndex !== -1 ? values[idIndex] || '' : ''
           };
         })
@@ -463,23 +754,13 @@
 
       const processed = processParticipants(rawParticipants);
       participants = processed.list;
-      createBranchButtons();
       
-      // อัปเดต Pool โดยกรองเอาเฉพาะคนที่ยังไม่ได้รางวัลออก
       const winnerNames = Array.from(winnerListEl.querySelectorAll('.w-name')).map(el => el.textContent.trim());
       
       jackpotPool = participants.filter(p => !winnerNames.includes(p.name));
       bigPool = participants.filter(p => !winnerNames.includes(p.name));
       
-      let statusMsg = `Sync สำเร็จ (${participants.length} คน)`;
-      if (processed.dupByName > 0 || processed.dupByID > 0) {
-        statusMsg += ` (ตัดชื่อซ้ำ: ${processed.dupByName}, รหัสซ้ำ: ${processed.dupByID})`;
-      }
-      setStatus(statusMsg);
-    }
-
-    function updateJackpotCounter() {
-      jackpotCounterEl.textContent = `สุ่ม Jackpot ไปแล้ว: ${jackpotDrawnCount} รางวัล`;
+      return processed;
     }
 
     const stageColors = [
@@ -497,6 +778,7 @@
     const loadBtn = document.getElementById("loadBtn");
     const statusEl = document.getElementById("status");
     const branchEl = document.getElementById("branch");
+    const departmentEl = document.getElementById("department");
     const winnerEl = document.getElementById("winner");
     const branchButtonsEl = document.getElementById("branchButtons");
     const drumSound = document.getElementById("drumSound");
@@ -565,6 +847,7 @@
 
     function resetDisplay() {
       branchEl.textContent = "";
+      departmentEl.textContent = "";
       winnerEl.textContent = "รีเซ็ตแล้ว";
     }
 
@@ -629,6 +912,7 @@
 
         let nameIndex = -1;
         let branchIndex = -1;
+        let departmentIndex = -1;
         let idIndex = -1;
 
         headers.forEach((header, index) => {
@@ -649,10 +933,14 @@
           if (h.includes('สาขา') || h.includes('branch')) {
             branchIndex = index;
           }
+          // ค้นหา 'แผนก'
+          if (h.includes('แผนก') || h.includes('dept') || h.includes('department')) {
+            departmentIndex = index;
+          }
         });
 
         // Debugging: แสดง index ที่หาได้ใน console
-        console.log('Detected Indices:', { nameIndex, branchIndex, idIndex, headers });
+        console.log('Detected Indices:', { nameIndex, branchIndex, departmentIndex, idIndex, headers });
 
         if (nameIndex === -1 || branchIndex === -1) {
           throw new Error(`ไม่พบคอลัมน์ที่ต้องการ. คอลัมน์ที่เจอ: ${headers.join(', ')}`);
@@ -680,6 +968,7 @@
               id: rowIndex + 1,
               name: nameIndex !== -1 ? values[nameIndex] || '' : '',
               branch: branchIndex !== -1 ? values[branchIndex] || '' : '',
+              department: departmentIndex !== -1 ? values[departmentIndex] || '' : '-',
               employeeID: idIndex !== -1 ? values[idIndex] || '' : ''
             };
           })
@@ -697,6 +986,7 @@
         createBranchButtons();
         buildPools();
         branchEl.textContent = "";
+        departmentEl.textContent = "";
         winnerEl.textContent = "รอประกาศรางวัล";
         startColorFlash(600);
 
@@ -725,6 +1015,10 @@
       }
     }
 
+    function updateJackpotCounter() {
+      jackpotCounterEl.textContent = `สุ่ม Jackpot ไปแล้ว: ${jackpotDrawnCount} รางวัล`;
+    }
+
     function drawJackpot() {
       if (spinning) return;
 
@@ -734,14 +1028,18 @@
       }
 
       spinning = true;
-      winnerEl.classList.remove('winning-moment');
+      winnerEl.classList.remove('reveal-active');
+      branchEl.classList.remove('reveal-active');
+      departmentEl.classList.remove('reveal-active');
+      
       winnerEl.textContent = "กำลังสุ่มสาขา...";
       branchEl.textContent = "???";
+      departmentEl.textContent = "";
 
       drumSound.currentTime = 0;
       drumSound.play().catch(() => {});
 
-      // STEP 1: สุ่มสาขา (5 วินาที)
+      // PHASE 1: สุ่มสาขา (4 วินาที)
       const phase1 = setInterval(() => {
         const currentBranches = [...new Set(jackpotPool.map(p => p.branch))];
         branchEl.textContent = randomFrom(currentBranches);
@@ -753,63 +1051,85 @@
         const availableBranches = [...new Set(jackpotPool.map(p => p.branch))];
         const selectedBranch = randomFrom(availableBranches);
         branchEl.textContent = selectedBranch;
-        winnerEl.textContent = "ได้สาขาแล้ว! เตรียมสุ่มชื่อ...";
+        branchEl.classList.add('reveal-active'); // โชว์เอฟเฟกต์สาขาที่ได้
+        winnerEl.textContent = "ได้สาขาแล้ว! กำลังสุ่มแผนก...";
 
-        // ช่วงพักหายใจ (2 วินาที)
+        // PHASE 2: สุ่มแผนก (4 วินาที)
         setTimeout(() => {
-          winnerEl.textContent = "กำลังสุ่มชื่อ...";
-          // STEP 2: สุ่มชื่อในสาขา (5 วินาที)
+          const deptsInBranch = [...new Set(jackpotPool.filter(p => p.branch === selectedBranch).map(p => p.department))];
+          
           const phase2 = setInterval(() => {
-            const branchPool = jackpotPool.filter(p => p.branch === selectedBranch);
-            if (!branchPool.length) return;
-            winnerEl.textContent = randomFrom(branchPool).name;
+            departmentEl.textContent = randomFrom(deptsInBranch);
           }, 100);
 
           setTimeout(() => {
             clearInterval(phase2);
+            const selectedDept = randomFrom(deptsInBranch);
+            departmentEl.textContent = selectedDept;
+            departmentEl.classList.add('reveal-active'); // โชว์เอฟเฟกต์แผนกที่ได้
+            winnerEl.textContent = "ได้แผนกแล้ว! เตรียมสุ่มชื่อ...";
 
-            const finalPool = jackpotPool.filter(p => p.branch === selectedBranch);
-            if (!finalPool.length) {
-              drumSound.pause();
-              spinning = false;
-              return;
-            }
-
-            const winner = randomFrom(finalPool);
-
-            // เมื่อได้รางวัล Jackpot ให้เอาชื่อออกจาก Jackpot Pool เท่านั้น (แยก Pool กันอย่างอิสระ)
-            jackpotPool = jackpotPool.filter(p => p.id !== winner.id);
-            // bigPool = bigPool.filter(p => p.id !== winner.id); // คอมเมนต์ออกเพื่อให้ได้รางวัลสาขาต่อได้
-            
-            jackpotDrawnCount++;
-            updateJackpotCounter();
-            
-            branchEl.textContent = selectedBranch;
-            winnerEl.textContent = `🎉 ${winner.name} 🎉`;
-            
-            addWinnerToList(winner.name, winner.branch, 'jackpot');
-
-            drumSound.pause();
-            drumSound.currentTime = 0;
-            winSound.currentTime = 0;
-            winSound.play().catch(() => {});
-
-            winnerEl.classList.add('winning-moment');
-            setTimeout(() => winnerEl.classList.remove('winning-moment'), 3000);
-
-            spinning = false;
-
-            // รอ 10 วินาทีแล้วรีเซ็ตหน้าจอ
+            // PHASE 3: สุ่มรายชื่อ (5 วินาที)
             setTimeout(() => {
-              if (!spinning) {
-                branchEl.textContent = "";
-                winnerEl.textContent = "รอประกาศรางวัล";
-                winnerEl.classList.remove('winning-moment');
-              }
-            }, 10000);
-          }, 5000); // สเต็ป 2: 5 วินาที
-        }, 2000); // ช่วงพักหายใจ: 2 วินาที
-      }, 5000); // สเต็ป 1: 5 วินาที
+              winnerEl.textContent = "กำลังสุ่มชื่อ...";
+              const finalPool = jackpotPool.filter(p => p.branch === selectedBranch && p.department === selectedDept);
+              
+              const phase3 = setInterval(() => {
+                if (finalPool.length > 0) {
+                  winnerEl.textContent = randomFrom(finalPool).name;
+                }
+              }, 100);
+
+              setTimeout(() => {
+                clearInterval(phase3);
+
+                if (!finalPool.length) {
+                  drumSound.pause();
+                  spinning = false;
+                  return;
+                }
+
+                const winner = randomFrom(finalPool);
+
+                // เมื่อได้รางวัล Jackpot ให้เอาชื่อออกจาก Jackpot Pool เท่านั้น
+                jackpotPool = jackpotPool.filter(p => p.id !== winner.id);
+                
+                jackpotDrawnCount++;
+                updateJackpotCounter();
+                
+                branchEl.textContent = selectedBranch;
+                departmentEl.textContent = winner.department;
+                winnerEl.textContent = `🎉 ${winner.name} 🎉`;
+                
+                addWinnerToList(winner.name, winner.branch, winner.department, 'jackpot');
+
+                drumSound.pause();
+                drumSound.currentTime = 0;
+                winSound.currentTime = 0;
+                winSound.play().catch(() => {});
+
+                // ใส่ลูกเล่นตอนประกาศผลสุดท้าย
+                winnerEl.classList.add('reveal-active');
+                triggerWinEffects();
+
+                spinning = false;
+
+                // รอ 10 วินาทีแล้วรีเซ็ตหน้าจอ
+                setTimeout(() => {
+                  if (!spinning) {
+                    branchEl.textContent = "";
+                    departmentEl.textContent = "";
+                    winnerEl.textContent = "รอประกาศรางวัล";
+                    winnerEl.classList.remove('reveal-active');
+                    branchEl.classList.remove('reveal-active');
+                    departmentEl.classList.remove('reveal-active');
+                  }
+                }, 10000);
+              }, 5000); // จบ Phase 3
+            }, 2000); // พักก่อนเริ่ม Phase 3
+          }, 4000); // จบ Phase 2
+        }, 1000); // พักก่อนเริ่ม Phase 2
+      }, 4000); // จบ Phase 1
     }
 
     function drawBigPrize(branch) {
@@ -822,59 +1142,82 @@
       }
 
       spinning = true;
-      winnerEl.classList.remove('winning-moment');
+      winnerEl.classList.remove('reveal-active');
+      branchEl.classList.remove('reveal-active');
+      departmentEl.classList.remove('reveal-active');
+      
       branchEl.textContent = branch;
-      winnerEl.textContent = "กำลังสุ่ม...";
+      departmentEl.textContent = "กำลังสุ่มแผนก...";
+      winnerEl.textContent = "...";
 
       drumSound.currentTime = 0;
       drumSound.play().catch(() => {});
 
-      const phase = setInterval(() => {
-        branchPool = bigPool.filter(p => p.branch === branch);
-        if (!branchPool.length) return;
-        winnerEl.textContent = randomFrom(branchPool).name;
+      // PHASE 1: สุ่มแผนก (4 วินาที)
+      const deptsInBranch = [...new Set(branchPool.map(p => p.department))];
+      const phase1 = setInterval(() => {
+        departmentEl.textContent = randomFrom(deptsInBranch);
       }, 100);
 
       setTimeout(() => {
-        clearInterval(phase);
+        clearInterval(phase1);
+        const selectedDept = randomFrom(deptsInBranch);
+        departmentEl.textContent = selectedDept;
+        departmentEl.classList.add('reveal-active');
+        winnerEl.textContent = "กำลังสุ่มรายชื่อ...";
 
-        branchPool = bigPool.filter(p => p.branch === branch);
-        if (!branchPool.length) {
-          drumSound.pause();
-          spinning = false;
-          return;
-        }
-
-        const winner = randomFrom(branchPool);
-
-        // เมื่อได้รางวัลภูมิภาค ให้เอาชื่อออกจากแค่ bigPool (รายการภูมิภาค)
-        // เพื่อให้ชื่อเขายังคงอยู่ใน jackpotPool และมีสิทธิ์ลุ้น Jackpot ต่อได้
-        bigPool = bigPool.filter(p => p.id !== winner.id);
-        
-        branchEl.textContent = branch;
-        winnerEl.textContent = `🎉 ${winner.name} 🎉`;
-
-        addWinnerToList(winner.name, winner.branch, 'branch');
-
-        drumSound.pause();
-        drumSound.currentTime = 0;
-        winSound.currentTime = 0;
-        winSound.play().catch(() => {});
-
-        winnerEl.classList.add('winning-moment');
-        setTimeout(() => winnerEl.classList.remove('winning-moment'), 3000);
-
-        spinning = false;
-
-        // รอ 10 วินาทีแล้วรีเซ็ตหน้าจอ
-        setTimeout(() => {
-          if (!spinning) {
-            branchEl.textContent = "";
-            winnerEl.textContent = "รอประกาศรางวัล";
-            winnerEl.classList.remove('winning-moment');
+        // PHASE 2: สุ่มชื่อ (6 วินาที)
+        const finalPool = branchPool.filter(p => p.department === selectedDept);
+        const phase2 = setInterval(() => {
+          if (finalPool.length > 0) {
+            winnerEl.textContent = randomFrom(finalPool).name;
           }
-        }, 10000);
-      }, 7000); // สุ่มรายชื่อ: 7 วินาที
+        }, 100);
+
+        setTimeout(() => {
+          clearInterval(phase2);
+
+          if (!finalPool.length) {
+            drumSound.pause();
+            spinning = false;
+            return;
+          }
+
+          const winner = randomFrom(finalPool);
+
+          // เมื่อได้รางวัลภูมิภาค ให้เอาชื่อออกจากแค่ bigPool
+          bigPool = bigPool.filter(p => p.id !== winner.id);
+          
+          branchEl.textContent = branch;
+          departmentEl.textContent = winner.department;
+          winnerEl.textContent = `🎉 ${winner.name} 🎉`;
+
+          addWinnerToList(winner.name, winner.branch, winner.department, 'branch');
+
+          drumSound.pause();
+          drumSound.currentTime = 0;
+          winSound.currentTime = 0;
+          winSound.play().catch(() => {});
+
+          // ใส่ลูกเล่นตอนประกาศผล
+          winnerEl.classList.add('reveal-active');
+          triggerWinEffects();
+
+          spinning = false;
+
+          // รอ 10 วินาทีแล้วรีเซ็ตหน้าจอ
+          setTimeout(() => {
+            if (!spinning) {
+              branchEl.textContent = "";
+              departmentEl.textContent = "";
+              winnerEl.textContent = "รอประกาศรางวัล";
+              winnerEl.classList.remove('reveal-active');
+              branchEl.classList.remove('reveal-active');
+              departmentEl.classList.remove('reveal-active');
+            }
+          }, 10000);
+        }, 6000);
+      }, 4000);
     }
 
     startColorFlash(600);
