@@ -7,6 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
+    /* ==========================================================================
+       1. GLOBAL STYLES & BACKGROUND (รูปแบบและพื้นหลังทั่วไป)
+       ========================================================================== */
     * { box-sizing: border-box; }
 
     body {
@@ -19,12 +22,14 @@
       color: #5c4b37;
       position: relative;
       overflow-x: hidden;
-      /* พื้นหลังรูปภาพวิวไทยตามต้นแบบ */
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
       background-position: center;
     }
 
+    /* ==========================================================================
+       2. MAIN CONTENT & CONTAINER (ส่วนเนื้อหาหลักและคอนเทนเนอร์)
+       ========================================================================== */
     .main-content {
       flex: 1;
       width: 100%;
@@ -56,6 +61,9 @@
       overflow-y: auto;
     }
 
+    /* ==========================================================================
+       3. SIDEBAR & WINNER LIST (แถบด้านข้างและรายชื่อผู้ชนะ)
+       ========================================================================== */
     .sidebar {
       width: 260px;
       height: 96vh;
@@ -78,94 +86,17 @@
       text-align: left;
     }
 
-    .winner-item {
-      background: #fff;
-      padding: 8px; margin-bottom: 8px;
-      border-radius: 10px; border-left: 4px solid #b08d57;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .winner-item.jackpot { border-left-color: #8c6d41; background: #fdfaf5; }
-    .winner-item .w-name { font-size: 14px; font-weight: 700; color: #5c4b37; }
-    .winner-item .w-info { font-size: 11px; color: #b08d57; }
-
+    /* ==========================================================================
+       4. ANIMATIONS & EFFECTS (เอฟเฟกต์ต่างๆ)
+       ========================================================================== */
     @keyframes slideIn {
       from { transform: translateX(50px); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
     }
 
-    @media (max-width: 1100px) {
-      body { flex-direction: column; }
-      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 2px solid #b08d57; }
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* ลายไทยพื้นหลังจางๆ */
-    body::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle, transparent 30%, rgba(176, 141, 87, 0.05) 100%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ลายพื้นหลังแบบเรียบหรู */
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: url('https://www.transparenttextures.com/patterns/white-diamond.pattern');
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      padding: 10px 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      max-width: 800px;
-      width: 95%;
-      height: 96vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      margin: auto;
-    }
-
-    #winner.spinning {
-      font-size: 80px;
-      color: #8c6d41;
-      text-shadow: 0 0 20px rgba(176, 141, 87, 0.2);
-    }
-
-    #winner.winning-moment {
-      animation: winnerReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      color: #5c4b37;
-      text-shadow: 0 0 30px rgba(176, 141, 87, 0.3);
-    }
-
-    @keyframes winnerReveal {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1.2); opacity: 1; }
-    }
-
+    /* ==========================================================================
+       5. TOP PANEL & LOGOS (ส่วนบนและโลโก้)
+       ========================================================================== */
     .top-panel {
       width: 100%;
       margin-bottom: 5px;
@@ -180,64 +111,9 @@
       filter: drop-shadow(0 2px 5px rgba(176, 141, 87, 0.2));
     }
 
-    .branch-logo-strip {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 5px;
-      flex-wrap: wrap;
-      background: rgba(255, 255, 255, 0.5);
-      padding: 5px 15px;
-      border-radius: 40px;
-      border: 1px solid rgba(176, 141, 87, 0.2);
-    }
-
-    .branch-logo-strip img {
-      height: 25px;
-      width: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));
-      transition: transform 0.3s ease;
-    }
-
-    .branch-logo-strip img:hover {
-      transform: scale(1.1);
-    }
-
-    h1 {
-      margin: 2px 0 5px;
-      font-size: 18px;
-      font-weight: 700;
-      color: #b08d57;
-      text-shadow: none;
-      letter-spacing: 1px;
-    }
-
-    .upload-row {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 5px;
-    }
-
-    input[type="text"] {
-      background: #fff;
-      border: 1px solid #d4c8b8;
-      color: #5c4b37;
-      padding: 4px 10px;
-      border-radius: 8px;
-      width: 180px;
-      font-size: 12px;
-      font-family: 'Kanit', sans-serif;
-    }
-
-    input[type="text"]::placeholder {
-      color: #a09080;
-    }
-
+    /* ==========================================================================
+       6. BUTTONS & INPUTS (ปุ่มและอินพุต)
+       ========================================================================== */
     button {
       padding: 8px 20px;
       border-radius: 15px;
@@ -266,30 +142,9 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    #loadBtn { 
-      background: #b08d57; /* สีทองบรอนซ์ตามรูป */
-    }
-
-    #syncBtn { 
-      background: #4a90e2; /* สีน้ำเงินตามรูป */
-    }
-
-    #resetBtn { 
-      background: #d4c8b8; /* สีเบจเทาตามรูป */
-      color: #5c4b37;
-    }
-
-    .btn-action:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    }
-
-    .btn-action span {
-      font-size: 16px;
-      line-height: 1;
-    }
-
+    /* ==========================================================================
+       7. LOTTERY DISPLAY (ส่วนแสดงผลชื่อผู้ชนะ/สาขา)
+       ========================================================================== */
     #status {
       font-size: 12px;
       color: #a09080;
@@ -313,6 +168,9 @@
       font-weight: 700;
     }
 
+    /* ==========================================================================
+       8. MAIN ACTION BUTTONS (ปุ่มสุ่ม Jackpot/ปุ่มรางวัลสาขา)
+       ========================================================================== */
     .button-row {
       margin-bottom: 10px;
     }
@@ -334,76 +192,12 @@
       100% { transform: scale(1); box-shadow: 0 10px 20px rgba(176, 141, 87, 0.2); }
     }
 
-    .branch-section {
-      border-top: 1px solid #d4c8b8;
-      padding-top: 5px;
-      margin-top: 2px;
-      width: 100%;
-    }
-
-    .label {
-      color: #a09080;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 5px;
-      display: block;
-      text-transform: uppercase;
-    }
-
-    #branchButtons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 4px;
-      width: 100%;
-    }
-
-    .branch-btn {
-      background: #fff;
-      color: #b08d57;
-      border: 1.5px solid #b08d57;
-      font-size: 10px;
-      padding: 4px 10px;
-      border-radius: 50px;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      font-weight: 700;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .branch-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-
-    /* คลาสสีเฉพาะสำหรับแต่ละโรงแรมตามโลโก้ */
-    .btn-sbox { color: #f39200; border-color: #f39200; }
-    .btn-sbox:hover { background: #f39200; color: #fff; }
-
-    .btn-s15 { color: #8c6d41; border-color: #8c6d41; }
-    .btn-s15:hover { background: #8c6d41; color: #fff; }
-
-    .btn-s31 { color: #5c4b37; border-color: #5c4b37; }
-    .btn-s31:hover { background: #5c4b37; color: #fff; }
-
-    .btn-s33 { color: #444444; border-color: #444444; }
-    .btn-s33:hover { background: #444444; color: #fff; }
-
-    .btn-sratchada { color: #006400; border-color: #006400; }
-    .btn-sratchada:hover { background: #006400; color: #fff; }
-
-    .btn-sram { color: #92c83e; border-color: #92c83e; }
-    .btn-sram:hover { background: #92c83e; color: #fff; }
-
-    .btn-sgroup { color: #b08d57; border-color: #b08d57; }
-    .btn-sgroup:hover { background: #b08d57; color: #fff; }
-
+    /* ==========================================================================
+       9. RESPONSIVE DESIGN (การปรับแต่งสำหรับหน้าจอขนาดต่างๆ)
+       ========================================================================== */
     @media (max-width: 1100px) {
-      body { flex-direction: column; overflow-y: auto; height: auto; }
-      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 1px solid rgba(255,255,255,0.5); }
-      .container { height: auto; min-height: 90vh; margin: 10px auto; padding: 20px 15px; }
-      .main-content { height: auto; }
+      body { flex-direction: column; }
+      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 2px solid #b08d57; }
     }
 
     @media (max-width: 600px) {
@@ -493,6 +287,9 @@
   <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-firework-explosion-1689.mp3" preload="auto"></audio>
 
   <script>
+    /* ==========================================================================
+       10. JAVASCRIPT LOGIC (ระบบการทำงานทั้งหมด)
+       ========================================================================== */
     let participants = [];
     let jackpotPool = [];
     let bigPool = [];
