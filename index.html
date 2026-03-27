@@ -7,6 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
+    /* ==========================================================================
+       1. GLOBAL STYLES & BACKGROUND (รูปแบบและพื้นหลังทั่วไป)
+       ========================================================================== */
     * { box-sizing: border-box; }
 
     body {
@@ -19,12 +22,14 @@
       color: #5c4b37;
       position: relative;
       overflow-x: hidden;
-      /* พื้นหลังรูปภาพวิวไทยตามต้นแบบ */
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
       background-position: center;
     }
 
+    /* ==========================================================================
+       2. MAIN CONTENT & CONTAINER (ส่วนเนื้อหาหลักและคอนเทนเนอร์)
+       ========================================================================== */
     .main-content {
       flex: 1;
       width: 100%;
@@ -56,6 +61,9 @@
       overflow-y: auto;
     }
 
+    /* ==========================================================================
+       3. SIDEBAR & WINNER LIST (แถบด้านข้างและรายชื่อผู้ชนะ)
+       ========================================================================== */
     .sidebar {
       width: 260px;
       height: 96vh;
@@ -78,97 +86,17 @@
       text-align: left;
     }
 
-    .winner-item {
-      background: #fff;
-      padding: 8px; margin-bottom: 8px;
-      border-radius: 10px; border-left: 4px solid #b08d57;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .winner-item.jackpot { border-left-color: #8c6d41; background: #fdfaf5; }
-    .winner-item .w-name { font-size: 14px; font-weight: 700; color: #5c4b37; }
-    .winner-item .w-info { font-size: 11px; color: #b08d57; }
-
+    /* ==========================================================================
+       4. ANIMATIONS & EFFECTS (เอฟเฟกต์ต่างๆ)
+       ========================================================================== */
     @keyframes slideIn {
       from { transform: translateX(50px); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
     }
 
-    @media (max-width: 1100px) {
-      body { flex-direction: column; }
-      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 2px solid #b08d57; }
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* ลายไทยพื้นหลังจางๆ */
-    body::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle, transparent 30%, rgba(176, 141, 87, 0.05) 100%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ลายพื้นหลังแบบเรียบหรู */
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: url('https://www.transparenttextures.com/patterns/white-diamond.pattern');
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      padding: 15px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      max-width: 800px;
-      width: 95%;
-      min-height: 90vh;
-      max-height: 98vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      margin: auto;
-      gap: 5px;
-      overflow-y: auto;
-    }
-
-    #winner.spinning {
-      font-size: 80px;
-      color: #8c6d41;
-      text-shadow: 0 0 20px rgba(176, 141, 87, 0.2);
-    }
-
-    #winner.winning-moment {
-      animation: winnerReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      color: #5c4b37;
-      text-shadow: 0 0 30px rgba(176, 141, 87, 0.3);
-    }
-
-    @keyframes winnerReveal {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1.2); opacity: 1; }
-    }
-
+    /* ==========================================================================
+       5. TOP PANEL & LOGOS (ส่วนบนและโลโก้)
+       ========================================================================== */
     .top-panel {
       width: 100%;
       margin-bottom: 5px;
@@ -183,19 +111,6 @@
       filter: drop-shadow(0 2px 5px rgba(176, 141, 87, 0.2));
     }
 
-    .branch-logo-strip {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 5px;
-      flex-wrap: wrap;
-      background: rgba(255, 255, 255, 0.5);
-      padding: 5px 15px;
-      border-radius: 40px;
-      border: 1px solid rgba(176, 141, 87, 0.2);
-    }
-
     .branch-logo-strip img {
       height: 18px;
       width: auto;
@@ -204,43 +119,9 @@
       transition: transform 0.3s ease;
     }
 
-    .branch-logo-strip img:hover {
-      transform: scale(1.1);
-    }
-
-    h1 {
-      margin: 2px 0 5px;
-      font-size: 18px;
-      font-weight: 700;
-      color: #b08d57;
-      text-shadow: none;
-      letter-spacing: 1px;
-    }
-
-    .upload-row {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 5px;
-    }
-
-    input[type="text"] {
-      background: #fff;
-      border: 1px solid #d4c8b8;
-      color: #5c4b37;
-      padding: 5px 12px;
-      border-radius: 10px;
-      width: 220px;
-      font-size: 13px;
-      font-family: 'Kanit', sans-serif;
-    }
-
-    input[type="text"]::placeholder {
-      color: #a09080;
-    }
-
+    /* ==========================================================================
+       6. BUTTONS & INPUTS (ปุ่มและอินพุต)
+       ========================================================================== */
     button {
       padding: 8px 20px;
       border-radius: 15px;
@@ -253,15 +134,15 @@
     }
 
     .btn-action {
-      padding: 8px 20px;
-      border-radius: 12px;
+      padding: 6px 15px;
+      border-radius: 10px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 12px;
       color: #fff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 5px;
       cursor: pointer;
       border: none;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -269,30 +150,9 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    #loadBtn { 
-      background: #b08d57; /* สีทองบรอนซ์ตามรูป */
-    }
-
-    #syncBtn { 
-      background: #4a90e2; /* สีน้ำเงินตามรูป */
-    }
-
-    #resetBtn { 
-      background: #d4c8b8; /* สีเบจเทาตามรูป */
-      color: #5c4b37;
-    }
-
-    .btn-action:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    }
-
-    .btn-action span {
-      font-size: 20px;
-      line-height: 1;
-    }
-
+    /* ==========================================================================
+       7. LOTTERY DISPLAY (ส่วนแสดงผลชื่อผู้ชนะ/สาขา)
+       ========================================================================== */
     #status {
       font-size: 12px;
       color: #a09080;
@@ -316,6 +176,9 @@
       font-weight: 700;
     }
 
+    /* ==========================================================================
+       8. MAIN ACTION BUTTONS (ปุ่มสุ่ม Jackpot/ปุ่มรางวัลสาขา)
+       ========================================================================== */
     .button-row {
       margin-bottom: 10px;
     }
@@ -337,19 +200,19 @@
       100% { transform: scale(1); box-shadow: 0 10px 20px rgba(176, 141, 87, 0.2); }
     }
 
-    .branch-section {
-      border-top: 1px solid #d4c8b8;
-      padding-top: 5px;
-      margin-top: 2px;
-      width: 100%;
+    /* ==========================================================================
+       9. RESPONSIVE DESIGN (การปรับแต่งสำหรับหน้าจอขนาดต่างๆ)
+       ========================================================================== */
+    @media (max-width: 1100px) {
+      body { flex-direction: column; }
+      .sidebar { width: 95%; height: 300px; margin: 20px 0; border-left: none; border-top: 2px solid #b08d57; }
     }
 
-<<<<<<< HEAD
     @media (max-width: 600px) {
       .container { padding: 15px 10px; width: 98%; }
       h1 { font-size: 16px; }
       #winner { font-size: 28px; }
-      .branch-logo-strip img { height: 10px; }
+      .branch-logo-strip img { height: 14px; }
       .upload-row { flex-direction: column; gap: 5px; }
       input[type="text"] { width: 100%; }
       .btn-action { width: 100%; padding: 10px; }
@@ -446,56 +309,575 @@
     // Helper to normalize strings for comparison
     function normalize(str) {
       return String(str || "").trim().toLowerCase().replace(/\s+/g, "");
-=======
-    .label {
-      color: #a09080;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 5px;
-      display: block;
-      text-transform: uppercase;
->>>>>>> be4f0e2f7602a03d1b27355bbeeddd32d8a0a8fb
     }
 
-    #branchButtons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 4px;
-      width: 100%;
+    function processParticipants(rawList) {
+      const seenNames = new Map();
+      const seenIDs = new Map();
+      const uniqueList = [];
+      const duplicates = [];
+      let dupByNameCount = 0;
+      let dupByIDCount = 0;
+
+      rawList.forEach(p => {
+        const normName = normalize(p.name);
+        const normID = normalize(p.employeeID);
+
+        let isDuplicate = false;
+        let reason = "";
+
+        // Check ID Duplicate (if ID is not empty)
+        if (normID && seenIDs.has(normID)) {
+          dupByIDCount++;
+          isDuplicate = true;
+          reason = `รหัสพนักงานซ้ำ (${p.employeeID})`;
+        } 
+        // Check Name Duplicate
+        else if (normName && seenNames.has(normName)) {
+          dupByNameCount++;
+          isDuplicate = true;
+          reason = `ชื่อ-นามสกุลซ้ำ (${p.name})`;
+        }
+
+        if (!isDuplicate) {
+          if (normName) seenNames.set(normName, true);
+          if (normID) seenIDs.set(normID, true);
+          uniqueList.push(p);
+        } else {
+          duplicates.push({ ...p, reason });
+        }
+      });
+
+      return {
+        list: uniqueList,
+        duplicates: duplicates,
+        dupByName: dupByNameCount,
+        dupByID: dupByIDCount
+      };
     }
 
-    .branch-btn {
-      background: #fff;
-      color: #b08d57;
-      border: 1.5px solid #b08d57;
-      font-size: 10px;
-      padding: 4px 10px;
-      border-radius: 50px;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      font-weight: 700;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      cursor: pointer;
-      white-space: nowrap;
+    const jackpotCounterEl = document.getElementById("jackpotCounter");
+    const syncStatus = document.getElementById("syncStatus");
+
+    const winnerListEl = document.getElementById("winnerList");
+
+    function addWinnerToList(name, branch, type) {
+      const item = document.createElement("div");
+      item.className = `winner-item ${type === 'jackpot' ? 'jackpot' : ''}`;
+      
+      const typeLabel = type === 'jackpot' ? '🎁 JACKPOT' : '🏆 รางวัลภูมิภาค';
+      
+      item.innerHTML = `
+        <div class="w-name">${name}</div>
+        <div class="w-info">${branch} - ${typeLabel}</div>
+      `;
+      
+      winnerListEl.prepend(item);
+      
+      // Update display area immediately
+      branchEl.textContent = branch;
+      winnerEl.textContent = `🎉 ${name} 🎉`;
     }
 
-    .branch-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    const syncBtn = document.getElementById("syncBtn");
+
+    async function manualSync() {
+      if (spinning) return;
+      const url = sheetUrlInput.value.trim();
+      if (!url) {
+        alert("กรุณาใส่ Google Sheets URL ก่อน");
+        return;
+      }
+      
+      syncBtn.disabled = true;
+      syncStatus.style.display = "inline-block";
+      syncStatus.classList.add('syncing');
+      
+      try {
+        await silentLoadData();
+        setStatus(`อัปเดตข้อมูลล่าสุดแล้ว (${participants.length} คน)`);
+      } catch (e) {
+        alert("การ Sync ข้อมูลขัดข้อง: " + e.message);
+      } finally {
+        syncStatus.style.display = "none";
+        syncStatus.classList.remove('syncing');
+        syncBtn.disabled = false;
+      }
     }
 
-    /* คลาสสีเฉพาะสำหรับแต่ละโรงแรมตามโลโก้ */
-    .btn-sbox { color: #f39200; border-color: #f39200; }
-    .btn-sbox:hover { background: #f39200; color: #fff; }
+    async function silentLoadData() {
+      const url = sheetUrlInput.value.trim();
+      const sheetId = extractSheetId(url);
+      if (!sheetId) return;
 
-    .btn-s15 { color: #8c6d41; border-color: #8c6d41; }
-    .btn-s15:hover { background: #8c6d41; color: #fff; }
+      const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+      const response = await fetch(csvUrl);
+      if (!response.ok) throw new Error("Network response was not ok");
 
-    .btn-s31 { color: #5c4b37; border-color: #5c4b37; }
-    .btn-s31:hover { background: #5c4b37; color: #fff; }
+      const csvText = await response.text();
+      const lines = csvText.split('\n').filter(line => line.trim());
+      if (lines.length < 2) return;
 
-    .btn-s33 { color: #444444; border-color: #444444; }
-    .btn-s33:hover { background: #444444; color: #fff; }
+      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+      let nameIndex = -1;
+      let branchIndex = -1;
+      let idIndex = -1;
 
-    .btn-sratchada { color: #006400; border-color: #006400; }
-    .btn-sratchada:hover { background: #006400; color: #fff;
+      headers.forEach((header, index) => {
+        const h = header.toLowerCase().trim();
+        const isTimestamp = h === 'ประทับเวลา' || h === 'timestamp' || h.includes('เวลา');
+
+        if ((h.includes('รหัส') || h.includes('employee id')) && !isTimestamp) idIndex = index;
+        if ((h.includes('ชื่อ') || h.includes('นามสกุล') || h.includes('name')) && !isTimestamp && !h.includes('สาขา')) nameIndex = index;
+        if (h.includes('สาขา') || h.includes('branch')) branchIndex = index;
+      });
+
+      if (nameIndex === -1 || branchIndex === -1) return;
+
+      const rawParticipants = lines.slice(1)
+        .map((line, rowIndex) => {
+          // ใช้การแยกข้อมูลแบบเดียวกับที่ใช้ใน loadFromGoogleSheet เพื่อความเสถียร
+          const values = [];
+          let current = '';
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') inQuotes = !inQuotes;
+            else if (char === ',' && !inQuotes) {
+              values.push(current.trim().replace(/^"|"$/g, ''));
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          values.push(current.trim().replace(/^"|"$/g, ''));
+
+          return {
+            id: rowIndex + 1,
+            name: nameIndex !== -1 ? values[nameIndex] || '' : '',
+            branch: branchIndex !== -1 ? values[branchIndex] || '' : '',
+            employeeID: idIndex !== -1 ? values[idIndex] || '' : ''
+          };
+        })
+        .filter(p => p.name && p.branch);
+
+      const processed = processParticipants(rawParticipants);
+      participants = processed.list;
+      createBranchButtons();
+      
+      // อัปเดต Pool โดยกรองเอาเฉพาะคนที่ยังไม่ได้รางวัลออก
+      const winnerNames = Array.from(winnerListEl.querySelectorAll('.w-name')).map(el => el.textContent.trim());
+      
+      jackpotPool = participants.filter(p => !winnerNames.includes(p.name));
+      bigPool = participants.filter(p => !winnerNames.includes(p.name));
+      
+      let statusMsg = `Sync สำเร็จ (${participants.length} คน)`;
+      if (processed.dupByName > 0 || processed.dupByID > 0) {
+        statusMsg += ` (ตัดชื่อซ้ำ: ${processed.dupByName}, รหัสซ้ำ: ${processed.dupByID})`;
+      }
+      setStatus(statusMsg);
+    }
+
+    function updateJackpotCounter() {
+      jackpotCounterEl.textContent = `สุ่ม Jackpot ไปแล้ว: ${jackpotDrawnCount} รางวัล`;
+    }
+
+    const stageColors = [
+      "red",
+      "green",
+      "purple",
+      "deepskyblue",
+      "yellow",
+      "white",
+      "blue",
+      "orange"
+    ];
+
+    const sheetUrlInput = document.getElementById("sheetUrl");
+    const loadBtn = document.getElementById("loadBtn");
+    const statusEl = document.getElementById("status");
+    const branchEl = document.getElementById("branch");
+    const winnerEl = document.getElementById("winner");
+    const branchButtonsEl = document.getElementById("branchButtons");
+    const drumSound = document.getElementById("drumSound");
+    const winSound = document.getElementById("winSound");
+
+    function setReadableTextColor(bgColor) {
+      if (bgColor === "yellow" || bgColor === "white") {
+        document.body.style.color = "black";
+      } else {
+        document.body.style.color = "white";
+      }
+    }
+
+    function startColorFlash(speed) {
+      // ยกเลิกเอฟเฟกต์กระพริบ
+    }
+
+    function stopColorFlash() {
+      if (colorInterval) {
+        clearInterval(colorInterval);
+        colorInterval = null;
+      }
+    }
+
+    function randomFrom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function normalizeKey(key) {
+      return String(key || "").trim().replace(/\s+/g, "");
+    }
+
+    function buildPools() {
+      jackpotPool = [...participants];
+      bigPool = [...participants];
+    }
+
+    function createBranchButtons() {
+      branchButtonsEl.innerHTML = "";
+      const uniqueBranches = [...new Set(participants.map(p => p.branch))];
+
+      uniqueBranches.forEach(branch => {
+        const btn = document.createElement("button");
+        btn.className = "branch-btn";
+        
+        // กำหนดสีตามชื่อสาขา
+        const name = branch.toUpperCase();
+        if (name.includes("BOX") || name.includes("บ็อกซ์")) btn.classList.add("btn-sbox");
+        else if (name.includes("S15")) btn.classList.add("btn-s15");
+        else if (name.includes("S31")) btn.classList.add("btn-s31");
+        else if (name.includes("S33")) btn.classList.add("btn-s33");
+        else if (name.includes("RATCHADA") || name.includes("รัชดา")) btn.classList.add("btn-sratchada");
+        else if (name.includes("RAM") || name.includes("ราม")) btn.classList.add("btn-sram");
+        else if (name.includes("GROUP") || name.includes("โรงแรม")) btn.classList.add("btn-sgroup");
+        else btn.classList.add("btn-sgroup");
+
+        btn.textContent = branch;
+        btn.onclick = () => drawBigPrize(branch);
+        branchButtonsEl.appendChild(btn);
+      });
+    }
+
+    function setStatus(msg) {
+      statusEl.textContent = msg;
+    }
+
+    function resetDisplay() {
+      branchEl.textContent = "";
+      winnerEl.textContent = "รีเซ็ตแล้ว";
+    }
+
+    function resetAll() {
+      buildPools();
+      spinning = false;
+      stopColorFlash();
+      startColorFlash(600);
+      resetDisplay();
+      jackpotDrawnCount = 0;
+      updateJackpotCounter();
+      winnerListEl.innerHTML = "";
+      setStatus(participants.length ? `รีเซ็ตแล้ว พร้อมใช้งาน (${participants.length} คน)` : "กรุณาวางลิงก์ Google Sheets");
+    }
+
+    function extractSheetId(url) {
+      const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+      return match ? match[1] : null;
+    }
+
+    async function loadFromGoogleSheet() {
+      const url = sheetUrlInput.value.trim();
+      console.log("URL ที่รับมา:", url);
+      
+      if (!url) {
+        setStatus("กรุณาใส่ Google Sheets URL");
+        return;
+      }
+
+      const sheetId = extractSheetId(url);
+      console.log("Sheet ID ที่ดึงได้:", sheetId);
+      
+      if (!sheetId) {
+        setStatus("URL ไม่ถูกต้อง");
+        alert("URL ไม่ถูกต้อง ต้องเป็น Google Sheets URL\nตัวอย่าง: https://docs.google.com/spreadsheets/d/xxxxx/edit");
+        return;
+      }
+
+      setStatus("กำลังดึงข้อมูล...");
+      loadBtn.disabled = true;
+
+      try {
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+        console.log('ลอง:', csvUrl);
+        
+        const response = await fetch(csvUrl);
+        
+        if (!response.ok) {
+          throw new Error(`ดึงข้อมูลไม่สำเร็จ: ${response.status}`);
+        }
+
+        const csvText = await response.text();
+        console.log('CSV:', csvText.substring(0, 200));
+
+        const lines = csvText.split('\n').filter(line => line.trim());
+        if (lines.length < 2) {
+          throw new Error('ไม่มีข้อมูล');
+        }
+
+        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+        console.log('Headers:', headers);
+
+        let nameIndex = -1;
+        let branchIndex = -1;
+        let idIndex = -1;
+
+        headers.forEach((header, index) => {
+          const h = header.toLowerCase().trim();
+          
+          // ตรวจสอบคอลัมน์ประทับเวลา
+          const isTimestamp = h === 'ประทับเวลา' || h === 'timestamp' || h.includes('เวลา');
+
+          // ค้นหา 'รหัสพนักงาน' (ต้องมีคำว่า รหัส และไม่ใช่ประทับเวลา)
+          if ((h.includes('รหัส') || h.includes('employee id')) && !isTimestamp) {
+            idIndex = index;
+          }
+          // ค้นหา 'ชื่อ-สกุล' (ต้องมีคำว่า ชื่อ หรือ นามสกุล และไม่ใช่ประทับเวลา และไม่ใช่สาขา)
+          if ((h.includes('ชื่อ') || h.includes('นามสกุล') || h.includes('name')) && !isTimestamp && !h.includes('สาขา')) {
+            nameIndex = index;
+          }
+          // ค้นหา 'สาขา' (ต้องมีคำว่า สาขา)
+          if (h.includes('สาขา') || h.includes('branch')) {
+            branchIndex = index;
+          }
+        });
+
+        // Debugging: แสดง index ที่หาได้ใน console
+        console.log('Detected Indices:', { nameIndex, branchIndex, idIndex, headers });
+
+        if (nameIndex === -1 || branchIndex === -1) {
+          throw new Error(`ไม่พบคอลัมน์ที่ต้องการ. คอลัมน์ที่เจอ: ${headers.join(', ')}`);
+        }
+
+        const rawParticipants = lines.slice(1)
+          .map((line, rowIndex) => {
+            // แยกด้วย comma แต่ต้องระวัง comma ในฟันหนู
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
+              if (char === '"') inQuotes = !inQuotes;
+              else if (char === ',' && !inQuotes) {
+                values.push(current.trim().replace(/^"|"$/g, ''));
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim().replace(/^"|"$/g, ''));
+
+            return {
+              id: rowIndex + 1,
+              name: nameIndex !== -1 ? values[nameIndex] || '' : '',
+              branch: branchIndex !== -1 ? values[branchIndex] || '' : '',
+              employeeID: idIndex !== -1 ? values[idIndex] || '' : ''
+            };
+          })
+          .filter(p => p.name && p.branch);
+
+        const processed = processParticipants(rawParticipants);
+        participants = processed.list;
+
+        console.log('Participants (Unique):', participants);
+
+        if (!participants.length) {
+          throw new Error('ไม่พบข้อมูลที่ใช้ได้');
+        }
+
+        createBranchButtons();
+        buildPools();
+        branchEl.textContent = "";
+        winnerEl.textContent = "รอประกาศรางวัล";
+        startColorFlash(600);
+
+        let successMsg = `โหลดสำเร็จ ${participants.length} คน`;
+        let alertMsg = `โหลดสำเร็จ ${participants.length} คน`;
+        
+        if (processed.dupByName > 0 || processed.dupByID > 0) {
+          const dupInfo = `พบข้อมูลซ้ำที่ถูกตัดออก:\n- ชื่อซ้ำ: ${processed.dupByName} รายการ\n- รหัสซ้ำ: ${processed.dupByID} รายการ`;
+          
+          const dupDetails = processed.duplicates.map(d => `- ${d.name} (${d.branch}) : ${d.reason}`).join('\n');
+          
+          successMsg += ` (พบข้อมูลซ้ำ ${processed.dupByName + processed.dupByID} รายการ)`;
+          alertMsg += `\n\n${dupInfo}\n\nรายชื่อที่ซ้ำ:\n${dupDetails}`;
+        }
+
+        setStatus(successMsg);
+        alert(alertMsg);
+        syncBtn.style.display = "inline-block"; // แสดงปุ่ม Sync หลังจากโหลดครั้งแรก
+
+      } catch (err) {
+        console.error("Full error:", err);
+        setStatus("ดึงข้อมูลไม่สำเร็จ");
+        alert("ดึงข้อมูลไม่สำเร็จ:\n" + err.message + "\n\nแนะนำ:\n1. แชร์ Sheets เป็น 'Anyone with the link can view'\n2. ตรวจสอบคอลัมน์ 'ชื่อ-สกุล' และ 'สาขา'\n3. ลองรีเฟรชหน้าแล้วลองใหม่");
+      } finally {
+        loadBtn.disabled = false;
+      }
+    }
+
+    function drawJackpot() {
+      if (spinning) return;
+
+      if (!jackpotPool.length) {
+        alert("ไม่มีผู้มีสิทธิ์ Jackpot แล้ว");
+        return;
+      }
+
+      spinning = true;
+      winnerEl.classList.remove('winning-moment');
+      winnerEl.textContent = "กำลังสุ่มสาขา...";
+      branchEl.textContent = "???";
+
+      drumSound.currentTime = 0;
+      drumSound.play().catch(() => {});
+
+      // STEP 1: สุ่มสาขา (5 วินาที)
+      const phase1 = setInterval(() => {
+        const currentBranches = [...new Set(jackpotPool.map(p => p.branch))];
+        branchEl.textContent = randomFrom(currentBranches);
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(phase1);
+
+        const availableBranches = [...new Set(jackpotPool.map(p => p.branch))];
+        const selectedBranch = randomFrom(availableBranches);
+        branchEl.textContent = selectedBranch;
+        winnerEl.textContent = "ได้สาขาแล้ว! เตรียมสุ่มชื่อ...";
+
+        // ช่วงพักหายใจ (2 วินาที)
+        setTimeout(() => {
+          winnerEl.textContent = "กำลังสุ่มชื่อ...";
+          // STEP 2: สุ่มชื่อในสาขา (5 วินาที)
+          const phase2 = setInterval(() => {
+            const branchPool = jackpotPool.filter(p => p.branch === selectedBranch);
+            if (!branchPool.length) return;
+            winnerEl.textContent = randomFrom(branchPool).name;
+          }, 100);
+
+          setTimeout(() => {
+            clearInterval(phase2);
+
+            const finalPool = jackpotPool.filter(p => p.branch === selectedBranch);
+            if (!finalPool.length) {
+              drumSound.pause();
+              spinning = false;
+              return;
+            }
+
+            const winner = randomFrom(finalPool);
+
+            // เมื่อได้รางวัล Jackpot ให้เอาชื่อออกจาก Jackpot Pool เท่านั้น (แยก Pool กันอย่างอิสระ)
+            jackpotPool = jackpotPool.filter(p => p.id !== winner.id);
+            // bigPool = bigPool.filter(p => p.id !== winner.id); // คอมเมนต์ออกเพื่อให้ได้รางวัลสาขาต่อได้
+            
+            jackpotDrawnCount++;
+            updateJackpotCounter();
+            
+            branchEl.textContent = selectedBranch;
+            winnerEl.textContent = `🎉 ${winner.name} 🎉`;
+            
+            addWinnerToList(winner.name, winner.branch, 'jackpot');
+
+            drumSound.pause();
+            drumSound.currentTime = 0;
+            winSound.currentTime = 0;
+            winSound.play().catch(() => {});
+
+            winnerEl.classList.add('winning-moment');
+            setTimeout(() => winnerEl.classList.remove('winning-moment'), 3000);
+
+            spinning = false;
+
+            // รอ 10 วินาทีแล้วรีเซ็ตหน้าจอ
+            setTimeout(() => {
+              if (!spinning) {
+                branchEl.textContent = "";
+                winnerEl.textContent = "รอประกาศรางวัล";
+                winnerEl.classList.remove('winning-moment');
+              }
+            }, 10000);
+          }, 5000); // สเต็ป 2: 5 วินาที
+        }, 2000); // ช่วงพักหายใจ: 2 วินาที
+      }, 5000); // สเต็ป 1: 5 วินาที
+    }
+
+    function drawBigPrize(branch) {
+      if (spinning) return;
+
+      let branchPool = bigPool.filter(p => p.branch === branch);
+      if (!branchPool.length) {
+        alert("สาขานี้ไม่มีสิทธิ์รางวัลใหญ่อีกแล้ว");
+        return;
+      }
+
+      spinning = true;
+      winnerEl.classList.remove('winning-moment');
+      branchEl.textContent = branch;
+      winnerEl.textContent = "กำลังสุ่ม...";
+
+      drumSound.currentTime = 0;
+      drumSound.play().catch(() => {});
+
+      const phase = setInterval(() => {
+        branchPool = bigPool.filter(p => p.branch === branch);
+        if (!branchPool.length) return;
+        winnerEl.textContent = randomFrom(branchPool).name;
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(phase);
+
+        branchPool = bigPool.filter(p => p.branch === branch);
+        if (!branchPool.length) {
+          drumSound.pause();
+          spinning = false;
+          return;
+        }
+
+        const winner = randomFrom(branchPool);
+
+        // เมื่อได้รางวัลภูมิภาค ให้เอาชื่อออกจากแค่ bigPool (รายการภูมิภาค)
+        // เพื่อให้ชื่อเขายังคงอยู่ใน jackpotPool และมีสิทธิ์ลุ้น Jackpot ต่อได้
+        bigPool = bigPool.filter(p => p.id !== winner.id);
+        
+        branchEl.textContent = branch;
+        winnerEl.textContent = `🎉 ${winner.name} 🎉`;
+
+        addWinnerToList(winner.name, winner.branch, 'branch');
+
+        drumSound.pause();
+        drumSound.currentTime = 0;
+        winSound.currentTime = 0;
+        winSound.play().catch(() => {});
+
+        winnerEl.classList.add('winning-moment');
+        setTimeout(() => winnerEl.classList.remove('winning-moment'), 3000);
+
+        spinning = false;
+
+        // รอ 10 วินาทีแล้วรีเซ็ตหน้าจอ
+        setTimeout(() => {
+          if (!spinning) {
+            branchEl.textContent = "";
+            winnerEl.textContent = "รอประกาศรางวัล";
+            winnerEl.classList.remove('winning-moment');
+          }
+        }, 10000);
+      }, 7000); // สุ่มรายชื่อ: 7 วินาที
+    }
+
+    startColorFlash(600);
+  </script>
+</body>
+</html>
